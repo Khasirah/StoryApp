@@ -5,6 +5,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import dev.peppo.storyapp.data.StoryRepository
 import dev.peppo.storyapp.di.Injection
+import dev.peppo.storyapp.view.createstory.CreateStoryViewModel
 import dev.peppo.storyapp.view.login.LoginViewModel
 import dev.peppo.storyapp.view.main.MainViewModel
 import dev.peppo.storyapp.view.register.RegisterViewModel
@@ -23,6 +24,9 @@ class ViewModelFactory private constructor(
         }
         if (modelClass.isAssignableFrom(MainViewModel::class.java)) {
             return MainViewModel(storyRepository) as T
+        }
+        if (modelClass.isAssignableFrom(CreateStoryViewModel::class.java)) {
+            return CreateStoryViewModel(storyRepository) as T
         }
         throw IllegalArgumentException("Unknown ViewModel class: " + modelClass.name)
     }

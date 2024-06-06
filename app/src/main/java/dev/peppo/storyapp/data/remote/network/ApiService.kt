@@ -1,9 +1,11 @@
 package dev.peppo.storyapp.data.remote.network
 
+import dev.peppo.storyapp.data.remote.response.createstory.CreateStoryResponse
 import dev.peppo.storyapp.data.remote.response.login.LoginResponse
 import dev.peppo.storyapp.data.remote.response.register.RegisterResponse
-import dev.peppo.storyapp.data.remote.response.story.ListStoryItem
 import dev.peppo.storyapp.data.remote.response.story.StoryResponse
+import okhttp3.MultipartBody
+import okhttp3.RequestBody
 import retrofit2.http.*
 
 interface ApiService {
@@ -25,5 +27,14 @@ interface ApiService {
 
     @GET("stories")
     suspend fun getStories() : StoryResponse
+
+    @Multipart
+    @POST("stories")
+    suspend fun createStory(
+        @Part file: MultipartBody.Part,
+        @Part("description") description: RequestBody,
+        @Part("lat") lat: RequestBody? = null,
+        @Part("lat") lon: RequestBody? = null,
+    ) : CreateStoryResponse
 
 }

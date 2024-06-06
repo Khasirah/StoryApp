@@ -13,12 +13,11 @@ import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 
 object ApiConfig {
-    fun getApiService(context: Context): ApiService {
-        val appPreferences = AppPreferences.getInstance(context.dataStore)
-        val token = runBlocking { appPreferences.getToken().first() }
-        val loggingInterceptor = HttpLoggingInterceptor().setLevel(HttpLoggingInterceptor.Level.BODY)
+    fun getApiService(appPreferences: AppPreferences): ApiService {
+        val loggingInterceptor =
+            HttpLoggingInterceptor().setLevel(HttpLoggingInterceptor.Level.BODY)
         val authInterceptor = Interceptor { chain ->
-            Log.d("testProcess", "ambil token: $token")
+            val token = runBlocking { appPreferences.getToken().first() }
             val req = chain.request()
             val requestHeader = req.newBuilder()
                 .addHeader("Authorization", "Bearer $token")

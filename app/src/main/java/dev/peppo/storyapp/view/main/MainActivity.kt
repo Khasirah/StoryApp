@@ -50,9 +50,21 @@ class MainActivity : AppCompatActivity() {
                     startActivity(toCreateStoryIntent)
                     true
                 }
+                R.id.logoutButton -> {
+                    processLogout(mainViewModel)
+                    true
+                }
                 else -> false
             }
         }
+    }
+
+    private fun processLogout(mainViewModel: MainViewModel) {
+        mainViewModel.logout()
+        val toLoginIntent = Intent(this, LoginActivity::class.java)
+        toLoginIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK)
+        startActivity(toLoginIntent)
+        finish()
     }
 
     private fun setupToolbar(toolbar: Toolbar) {

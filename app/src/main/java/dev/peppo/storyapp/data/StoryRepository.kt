@@ -5,11 +5,14 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.liveData
 import com.google.gson.Gson
 import dev.peppo.storyapp.data.remote.network.ApiService
+import dev.peppo.storyapp.data.remote.response.createstory.CreateStoryResponse
 import dev.peppo.storyapp.data.remote.response.error.ErrorResponse
 import dev.peppo.storyapp.data.remote.response.login.LoginResponse
 import dev.peppo.storyapp.data.remote.response.register.RegisterResponse
 import dev.peppo.storyapp.data.remote.response.story.StoryResponse
 import dev.peppo.storyapp.utils.AppPreferences
+import okhttp3.MultipartBody
+import okhttp3.RequestBody
 import retrofit2.HttpException
 import kotlin.Exception
 
@@ -64,6 +67,28 @@ class StoryRepository private constructor(
         emit(Result.Loading)
         try {
             val response = apiService.getStories()
+            emit(Result.Success(response))
+        } catch (e: HttpException) {
+            val jsonInString = e.response()?.errorBody()?.string()
+            val errorBody = Gson().fromJson(jsonInString, ErrorResponse::class.java)
+            val errorMessage = errorBody.message
+            emit(Result.Error(errorMessage.toString()))
+        } catch (e: Exception) {
+            emit(Result.Error(e.message.toString()))
+        }
+    }
+
+    suspend fun logout() {
+        appPreferences.deleteLoginSession()
+    }
+
+    fun createStory(
+        multipartBody: MultipartBody.Part,
+        description: RequestBody
+    ): LiveData<Result<CreateStoryResponse>> = liveData {
+        emit(Result.Loading)
+        try {
+            val response = apiService.createStory(multipartBody, description)
             emit(Result.Success(response))
         } catch (e: HttpException) {
             val jsonInString = e.response()?.errorBody()?.string()

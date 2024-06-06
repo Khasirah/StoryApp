@@ -27,7 +27,12 @@ class AppPreferences private constructor(private val dataStore: DataStore<Prefer
         dataStore.edit { pref ->
             pref[token] = userToken
         }
-        Log.d("testProcess", "token berhasil di simpan")
+    }
+
+    suspend fun deleteLoginSession() {
+        dataStore.edit { pref ->
+            pref.remove(token)
+        }
     }
 
     companion object {

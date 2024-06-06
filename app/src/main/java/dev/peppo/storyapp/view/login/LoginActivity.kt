@@ -1,5 +1,6 @@
 package dev.peppo.storyapp.view.login
 
+import android.animation.ObjectAnimator
 import android.content.Intent
 import android.os.Bundle
 import android.util.Log
@@ -36,6 +37,7 @@ class LoginActivity : AppCompatActivity() {
 
         val factory = ViewModelFactory.getInstance(this)
         val loginViewModel: LoginViewModel by viewModels<LoginViewModel> { factory }
+        playAnimation()
 
         binding.loginButton.setOnClickListener {
             val email = binding.emailEditText.text.toString()
@@ -49,7 +51,6 @@ class LoginActivity : AppCompatActivity() {
                         }
                         is Result.Success -> {
                             showLoading(false)
-                            Log.d("testProcess", "login success")
                             processLogin(it.data)
                         }
                         is Result.Error -> {
@@ -65,6 +66,14 @@ class LoginActivity : AppCompatActivity() {
             val toRegisterIntent = Intent(this, RegisterActivity::class.java)
             startActivity(toRegisterIntent)
         }
+    }
+
+    private fun playAnimation() {
+        ObjectAnimator.ofFloat(binding.imageView, View.TRANSLATION_X, -30f, 30f).apply {
+            duration = 6000
+            repeatCount = ObjectAnimator.INFINITE
+            repeatMode = ObjectAnimator.REVERSE
+        }.start()
     }
 
     private fun processLogin(data: LoginResponse) {

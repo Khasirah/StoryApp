@@ -12,7 +12,7 @@ import kotlinx.coroutines.runBlocking
 object Injection {
     fun provideRepository(context: Context) : StoryRepository {
         val appPreferences = AppPreferences.getInstance(context.dataStore)
-        val apiService = ApiConfig.getApiService(context)
+        val apiService = ApiConfig.getApiService(appPreferences)
         return StoryRepository.getInstance(apiService, appPreferences)
     }
 }

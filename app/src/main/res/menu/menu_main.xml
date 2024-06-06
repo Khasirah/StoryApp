@@ -6,4 +6,8 @@
         android:title="@string/add_story"
         app:showAsAction="ifRoom"
         android:icon="@drawable/baseline_add_24"/>
+    <item
+        android:id="@+id/logoutButton"
+        android:title="@string/logout"
+        app:showAsAction="never"/>
 </menu>
