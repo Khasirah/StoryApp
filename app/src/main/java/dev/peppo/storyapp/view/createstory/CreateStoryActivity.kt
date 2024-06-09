@@ -12,16 +12,12 @@ import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
-import androidx.lifecycle.lifecycleScope
 import dev.peppo.storyapp.data.Result
-import dev.peppo.storyapp.data.remote.response.createstory.CreateStoryResponse
 import dev.peppo.storyapp.databinding.ActivityCreateStoryBinding
 import dev.peppo.storyapp.utils.ViewModelFactory
 import dev.peppo.storyapp.utils.getImageUri
 import dev.peppo.storyapp.utils.uriToFile
-import dev.peppo.storyapp.view.login.LoginViewModel
 import dev.peppo.storyapp.view.main.MainActivity
-import kotlinx.coroutines.launch
 import okhttp3.MediaType.Companion.toMediaType
 import okhttp3.MultipartBody
 import okhttp3.RequestBody.Companion.asRequestBody

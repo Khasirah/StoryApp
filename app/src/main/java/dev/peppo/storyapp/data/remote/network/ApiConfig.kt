@@ -1,9 +1,6 @@
 package dev.peppo.storyapp.data.remote.network
 
-import android.content.Context
-import android.util.Log
 import dev.peppo.storyapp.utils.AppPreferences
-import dev.peppo.storyapp.utils.dataStore
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.runBlocking
 import okhttp3.Interceptor

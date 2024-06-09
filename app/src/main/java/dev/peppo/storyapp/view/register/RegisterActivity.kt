@@ -6,16 +6,13 @@ import android.view.View
 import android.widget.Toast
 import androidx.activity.enableEdgeToEdge
 import androidx.activity.viewModels
-import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import dev.peppo.storyapp.data.Result
 import dev.peppo.storyapp.data.remote.response.register.RegisterResponse
 import dev.peppo.storyapp.databinding.ActivityRegisterBinding
-import dev.peppo.storyapp.utils.AppPreferences
 import dev.peppo.storyapp.utils.ViewModelFactory
-import dev.peppo.storyapp.utils.dataStore
 import dev.peppo.storyapp.view.login.LoginActivity
 
 class RegisterActivity : AppCompatActivity() {

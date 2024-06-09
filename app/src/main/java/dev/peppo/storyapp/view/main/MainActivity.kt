@@ -3,8 +3,6 @@ package dev.peppo.storyapp.view.main
 import android.content.Intent
 import android.os.Bundle
 import android.view.Menu
-import android.view.View
-import android.widget.Toast
 import androidx.activity.enableEdgeToEdge
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
@@ -13,13 +11,12 @@ import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.recyclerview.widget.LinearLayoutManager
 import dev.peppo.storyapp.R
-import dev.peppo.storyapp.data.Result
-import dev.peppo.storyapp.data.remote.response.story.ListStoryItem
 import dev.peppo.storyapp.databinding.ActivityMainBinding
 import dev.peppo.storyapp.utils.ViewModelFactory
+import dev.peppo.storyapp.view.adapter.LoadingStateAdapter
 import dev.peppo.storyapp.view.createstory.CreateStoryActivity
-import dev.peppo.storyapp.view.detailstory.DetailStoryActivity
 import dev.peppo.storyapp.view.login.LoginActivity
+import dev.peppo.storyapp.view.map.MapsActivity
 
 class MainActivity : AppCompatActivity() {
 
@@ -40,6 +37,7 @@ class MainActivity : AppCompatActivity() {
         val factory = ViewModelFactory.getInstance(this)
         val mainViewModel: MainViewModel by viewModels<MainViewModel> { factory }
 
+        checkToken(mainViewModel)
         setupToolbar(toolbar)
         setupRecycleView(mainViewModel)
 
@@ -54,7 +52,22 @@ class MainActivity : AppCompatActivity() {
                     processLogout(mainViewModel)
                     true
                 }
+                R.id.mapButton -> {
+                    val toMapIntent = Intent(this@MainActivity, MapsActivity::class.java)
+                    startActivity(toMapIntent)
+                    true
+                }
                 else -> false
+            }
+        }
+    }
+
+    private fun checkToken(mainViewModel: MainViewModel) {
+        mainViewModel.getToken().observe(this) {
+            if (it == "null") {
+                val toLoginIntent = Intent(this, LoginActivity::class.java)
+                startActivity(toLoginIntent)
+                finish()
             }
         }
     }
@@ -77,40 +90,18 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun setupRecycleView(mainViewModel: MainViewModel) {
-        binding.rvStories.setHasFixedSize(true)
-        binding.rvStories.layoutManager = LinearLayoutManager(this)
-        mainViewModel.getStories().observe(this) {
-            if (it != null) {
-                when(it) {
-                    is Result.Loading -> {
-                        showLoading(true)
-                    }
-                    is Result.Success -> {
-                        showLoading(false)
-                        val storiesAdapter = StoriesAdapter(it.data.listStory as ArrayList)
-                        binding.rvStories.adapter = storiesAdapter
-
-                        storiesAdapter.setOnItemClickCallback(object : StoriesAdapter.OnItemClickCallback {
-                            override fun onItemClicked(data: ListStoryItem) {
-                                val toDetailIntent = Intent(this@MainActivity, DetailStoryActivity::class.java)
-                                toDetailIntent.putExtra(DetailStoryActivity.EXTRA_STORY, data)
-                                startActivity(toDetailIntent)
-
-                            }
-                        })
-                    }
-                    is Result.Error -> {
-                        showLoading(false)
-                        val toLoginIntent = Intent(this, LoginActivity::class.java)
-                        startActivity(toLoginIntent)
-                    }
+        val pagingStoriesAdapter = PagingStoriesAdapter()
+        binding.rvStories.apply {
+            setHasFixedSize(true)
+            layoutManager = LinearLayoutManager(context)
+            adapter = pagingStoriesAdapter.withLoadStateFooter(
+                footer = LoadingStateAdapter {
+                    pagingStoriesAdapter.retry()
                 }
-            }
+            )
+        }
+        mainViewModel.getStories().observe(this) {
+            pagingStoriesAdapter.submitData(lifecycle, it)
         }
     }
-
-    private fun showLoading(isLoading: Boolean) {
-        binding.progressBar.visibility = if (isLoading) View.VISIBLE else View.GONE
-    }
-
 }

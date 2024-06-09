@@ -8,6 +8,7 @@ import dev.peppo.storyapp.di.Injection
 import dev.peppo.storyapp.view.createstory.CreateStoryViewModel
 import dev.peppo.storyapp.view.login.LoginViewModel
 import dev.peppo.storyapp.view.main.MainViewModel
+import dev.peppo.storyapp.view.map.MapViewModel
 import dev.peppo.storyapp.view.register.RegisterViewModel
 
 class ViewModelFactory private constructor(
@@ -27,6 +28,9 @@ class ViewModelFactory private constructor(
         }
         if (modelClass.isAssignableFrom(CreateStoryViewModel::class.java)) {
             return CreateStoryViewModel(storyRepository) as T
+        }
+        if (modelClass.isAssignableFrom(MapViewModel::class.java)) {
+            return MapViewModel(storyRepository) as T
         }
         throw IllegalArgumentException("Unknown ViewModel class: " + modelClass.name)
     }

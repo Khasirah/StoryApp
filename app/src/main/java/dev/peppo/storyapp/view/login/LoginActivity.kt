@@ -3,7 +3,6 @@ package dev.peppo.storyapp.view.login
 import android.animation.ObjectAnimator
 import android.content.Intent
 import android.os.Bundle
-import android.util.Log
 import android.view.View
 import android.widget.Toast
 import androidx.activity.enableEdgeToEdge
@@ -14,9 +13,7 @@ import androidx.core.view.WindowInsetsCompat
 import dev.peppo.storyapp.data.Result
 import dev.peppo.storyapp.data.remote.response.login.LoginResponse
 import dev.peppo.storyapp.databinding.ActivityLoginBinding
-import dev.peppo.storyapp.utils.AppPreferences
 import dev.peppo.storyapp.utils.ViewModelFactory
-import dev.peppo.storyapp.utils.dataStore
 import dev.peppo.storyapp.view.main.MainActivity
 import dev.peppo.storyapp.view.register.RegisterActivity
 
